@@ -1,0 +1,14 @@
+﻿torch
+transformers
+sentencepiece
+pandas
+numpy
+scikit-learn
+sacrebleu
+evaluate
+beautifulsoup4
+streamlit
+sentence-transformers
+datasets
+accelerate
+peft

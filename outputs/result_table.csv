@@ -1,0 +1,5 @@
+Model,Dataset,BLEU,chrF,Avg Time,Manual Score
+Baseline NLLB 600M,No fine-tuning,17.97,36.49,4.46 sec,
+NLLB LoRA 10k clean,10k clean,,,,
+NLLB LoRA 10k filtered,10k semantic-filtered,,,,
+NLLB LoRA 50k filtered,50k semantic-filtered,,,,
