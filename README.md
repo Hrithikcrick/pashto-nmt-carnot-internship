@@ -72,3 +72,29 @@ The baseline system uses the pretrained facebook/nllb-200-distilled-600M model.
 ## Author
 
 Hrithik Sharma
+
+
+## Week 2 Analysis Dashboard
+
+The Week 2 research analysis includes dataset cleaning summary, train-validation-test split, baseline BLEU/chrF score, inference time analysis, and research progress dashboard.
+
+### Analysis Figures
+
+![Dataset Cleaning Summary](outputs/figures/dataset_cleaning_summary.png)
+
+![Train Validation Test Split](outputs/figures/train_val_test_split.png)
+
+![Baseline Metrics](outputs/figures/baseline_metrics.png)
+
+![Inference Time](outputs/figures/inference_time.png)
+
+![Research Progress Dashboard](outputs/figures/research_progress_dashboard.png)
+
+### Research Tables
+
+- `outputs/tables/dataset_cleaning_summary.csv`
+- `outputs/tables/train_val_test_split.csv`
+- `outputs/tables/baseline_metrics.csv`
+- `outputs/tables/inference_time.csv`
+- `outputs/tables/model_comparison_plan.csv`
+- `outputs/tables/manual_evaluation_template.csv`

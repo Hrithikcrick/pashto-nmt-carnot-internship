@@ -1,0 +1,10 @@
+task,progress_percent
+Baseline implementation,100
+Dataset cleaning,100
+Train/validation/test split,100
+Baseline evaluation,100
+Manual gold test set,0
+Semantic filtering,0
+NLLB fine-tuning,0
+IndicTrans2 Hindi pipeline,0
+Final Streamlit demo,0

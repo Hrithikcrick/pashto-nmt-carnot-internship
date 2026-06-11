@@ -1,0 +1,6 @@
+experiment,model,dataset,bleu,chrf,avg_time_sec,status
+E0,Baseline NLLB 600M,No fine-tuning,17.97,36.49,4.46,completed
+E1,NLLB LoRA,10k clean pairs,,,,planned
+E2,NLLB LoRA,10k semantic-filtered pairs,,,,planned
+E3,NLLB LoRA,50k semantic-filtered pairs,,,,planned
+E4,NLLB LoRA + Back Translation,50k filtered + synthetic pairs,,,,planned
