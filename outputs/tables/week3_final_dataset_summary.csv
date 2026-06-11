@@ -1,0 +1,4 @@
+file,purpose,rows,columns
+cleaned_90k.csv,Final cleaned Pashto-English dataset,90978,3
+train_high_quality_10k.csv,High-quality subset prepared for fine-tuning,10000,3
+gold_test_candidates_100.csv,Clean test/gold candidate set for evaluation,100,5

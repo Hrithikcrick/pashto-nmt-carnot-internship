@@ -121,3 +121,25 @@ Week 3 work integrates cleaned dataset files, high-quality training subset, gold
 - `outputs/tables/week3_high_quality_subset_summary.csv`
 - `outputs/tables/week3_clean_test_baseline_scores.csv`
 - `outputs/tables/week3_manual_error_analysis_clean_test.csv`
+
+
+## Week 3 Final Dataset Quality and Evaluation
+
+Week 3 completed dataset-quality preparation before fine-tuning. The work includes cleaned dataset integration, high-quality 10k subset preparation, gold test candidates, clean-test baseline score integration, and manual error analysis.
+
+### Week 3 Final Graphs
+
+![Week 3 Final Dataset Summary](outputs/figures/week3_final_dataset_summary.png)
+
+![Week 3 Final Status](outputs/figures/week3_final_status.png)
+
+### Week 3 Final Report
+
+- `docs/week3_final_report.md`
+
+### Week 3 Final Tables
+
+- `outputs/tables/week3_final_dataset_summary.csv`
+- `outputs/tables/week3_final_status.csv`
+- `outputs/tables/week3_final_clean_test_scores.csv`
+- `outputs/tables/week3_final_error_type_counts.csv`

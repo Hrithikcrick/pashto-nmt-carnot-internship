@@ -1,0 +1,8 @@
+task,completion
+Cleaned 90k dataset prepared,100
+High-quality 10k subset prepared,100
+Gold test candidates prepared,100
+Clean-test baseline score integrated,100
+Manual error analysis integrated,100
+Week 3 report generated,100
+LoRA fine-tuning,0
