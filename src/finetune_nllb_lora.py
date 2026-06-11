@@ -93,7 +93,7 @@ def main():
         args=args_train,
         train_dataset=train_tok,
         eval_dataset=valid_tok,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=collator
     )
 
