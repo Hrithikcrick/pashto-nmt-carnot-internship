@@ -1,0 +1,4 @@
+model,dataset,direction,samples,BLEU,chrF,avg_time_per_sentence_sec
+facebook/nllb-200-distilled-600M,clean_test_100_for_manual_check,Pashto-English,50,18.97122597625508,36.57049235850246,3.7071607398986814
+facebook/nllb-200-distilled-600M,clean_test_100_for_manual_check,Pashto-Hindi Direct,50,,,3.9142291736602783
+facebook/nllb-200-distilled-600M,clean_test_100_for_manual_check,Pashto-English-Hindi Pivot,50,,,3.877958669662476

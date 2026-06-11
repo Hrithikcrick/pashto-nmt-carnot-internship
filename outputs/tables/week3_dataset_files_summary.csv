@@ -1,0 +1,4 @@
+dataset,file,rows,columns
+Cleaned dataset,data/cleaned_90k.csv,90978,3
+High-quality training subset,data/train_high_quality_10k.csv,10000,3
+Gold test candidates,data/gold_test_candidates_100.csv,100,5

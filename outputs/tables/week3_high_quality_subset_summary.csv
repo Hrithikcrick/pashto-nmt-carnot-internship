@@ -1,0 +1,4 @@
+﻿stage,rows
+input_clean_rows,90978
+after_quality_filter,50426
+final_high_quality_subset,10000

@@ -98,3 +98,26 @@ The Week 2 research analysis includes dataset cleaning summary, train-validation
 - `outputs/tables/inference_time.csv`
 - `outputs/tables/model_comparison_plan.csv`
 - `outputs/tables/manual_evaluation_template.csv`
+
+
+## Week 3 Dataset Quality Integration
+
+Week 3 work integrates cleaned dataset files, high-quality training subset, gold test candidates, clean-test baseline scores, and manual error analysis into the research repository.
+
+### Week 3 Graphs
+
+![Week 3 Dataset Files Summary](outputs/figures/week3_dataset_files_summary.png)
+
+![Week 3 Status Summary](outputs/figures/week3_status_summary.png)
+
+### Week 3 Report
+
+- `docs/week3_dataset_quality_report.md`
+
+### Week 3 Tables
+
+- `outputs/tables/week3_dataset_files_summary.csv`
+- `outputs/tables/week3_status_summary.csv`
+- `outputs/tables/week3_high_quality_subset_summary.csv`
+- `outputs/tables/week3_clean_test_baseline_scores.csv`
+- `outputs/tables/week3_manual_error_analysis_clean_test.csv`

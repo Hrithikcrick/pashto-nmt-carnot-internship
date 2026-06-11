@@ -1,0 +1,5 @@
+metric,value
+samples,50.0
+BLEU,18.97122597625508
+chrF,36.57049235850246
+avg_time_per_sentence_sec,3.7071607398986814
