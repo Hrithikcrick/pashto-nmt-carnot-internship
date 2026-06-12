@@ -1,0 +1,2 @@
+model,samples,BLEU,chrF
+models\nllb_lora_trial_3000,100,19.7,38.49

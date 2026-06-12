@@ -1,0 +1,2 @@
+model,samples,BLEU,chrF
+models\nllb_lora_10k_cpu,100,19.77,38.76

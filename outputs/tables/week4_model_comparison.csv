@@ -1,0 +1,8 @@
+model,samples,BLEU,chrF
+facebook/nllb-200-distilled-600M,100,19.63,37.91
+models\nllb_lora_10k_cpu,100,19.77,38.76
+models\nllb_lora_trial_100,100,19.65,37.97
+models\nllb_lora_trial_1000,100,19.79,38.33
+models\nllb_lora_trial_20,100,19.63,37.91
+models\nllb_lora_trial_3000,100,19.7,38.49
+models\nllb_lora_trial_500,100,20.09,38.27
