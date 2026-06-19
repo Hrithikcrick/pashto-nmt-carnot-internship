@@ -179,3 +179,25 @@ The fine-tuning pipeline uses Hugging Face Transformers, Datasets, and PEFT/LoRA
 
 The full model checkpoints are not pushed to GitHub because they are large. Only scripts, reports, graphs, and evaluation outputs are included in the repository.
 
+
+## Week 5 Future Work
+
+In Week 5, the project will move toward stronger evaluation and improvement of the Pashto Neural Machine Translation system.
+
+### Planned Week 5 Tasks
+
+- Continue larger LoRA fine-tuning experiments using more high-quality Pashto-English sentence pairs.
+- Compare different fine-tuned checkpoints using BLEU and chrF.
+- Add semantic similarity filtering using LaBSE, LASER, or multilingual sentence-transformers.
+- Improve dataset quality by filtering noisy or weak sentence pairs.
+- Perform manual evaluation of translation outputs.
+- Analyze errors such as missing words, named entity mistakes, tense/gender errors, hallucinations, and poor fluency.
+- Compare direct Pashto-to-Hindi translation with Pashto-to-English-to-Hindi pivot translation.
+- Explore IndicTrans2 for better English-to-Hindi translation.
+- Prepare final comparison report with baseline vs fine-tuned results.
+- Move toward final demo preparation.
+
+### Week 5 Note
+
+These are planned future tasks and should not be marked as completed until the experiments are actually run.
+
