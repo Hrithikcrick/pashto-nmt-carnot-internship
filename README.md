@@ -143,3 +143,39 @@ Week 3 completed dataset-quality preparation before fine-tuning. The work includ
 - `outputs/tables/week3_final_status.csv`
 - `outputs/tables/week3_final_clean_test_scores.csv`
 - `outputs/tables/week3_final_error_type_counts.csv`
+
+## Week 4 LoRA Fine-Tuning and Evaluation
+
+Week 4 focuses on LoRA-based fine-tuning of the `facebook/nllb-200-distilled-600M` model for Pashto-to-English Neural Machine Translation.
+
+The fine-tuning pipeline uses Hugging Face Transformers, Datasets, and PEFT/LoRA. Initial local training trials were completed successfully, and the models were evaluated using BLEU and chrF scores. Early evaluations showed consistent chrF values around 38-39.
+
+### Week 4 Work Completed
+
+- Prepared LoRA fine-tuning plan.
+- Created Hugging Face NLLB fine-tuning script.
+- Created evaluation script for BLEU and chrF.
+- Created automatic Week 4 report generation script.
+- Fixed local training compatibility issues with the updated Transformers library.
+- Completed initial LoRA training trials on local machine.
+- Generated baseline vs fine-tuned comparison outputs.
+
+### Week 4 Important Files
+
+- `docs/week4_finetuning_plan.md`
+- `docs/week4_colab_steps.md`
+- `docs/week4_finetuning_report.md`
+- `src/finetune_nllb_lora.py`
+- `src/evaluate_week4_model.py`
+- `src/generate_week4_report.py`
+
+### Week 4 Results
+
+- `outputs/tables/week4_model_comparison.csv`
+- `outputs/figures/week4_bleu_comparison.png`
+- `outputs/figures/week4_chrf_comparison.png`
+
+### Week 4 Note
+
+The full model checkpoints are not pushed to GitHub because they are large. Only scripts, reports, graphs, and evaluation outputs are included in the repository.
+
