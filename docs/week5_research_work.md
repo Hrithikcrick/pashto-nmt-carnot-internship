@@ -17,7 +17,7 @@ This research stage focuses on improving the Pashto Neural Machine Translation p
 
 | Total Rows Scored | Filtered Rows Saved | Mean Similarity | Median Similarity | Min Similarity | Max Similarity |
 |---:|---:|---:|---:|---:|---:|
-| 1000 | 800 | 0.3976 | 0.3957 | -0.1328 | 0.9295 |
+| 10000 | 8000 | 0.4001 | 0.3967 | -0.2038 | 1.0 |
 
 ![Semantic Similarity Distribution](../outputs/figures/week5_semantic_similarity_distribution.png)
 

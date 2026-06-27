@@ -1,2 +1,2 @@
 input_file,total_rows_scored,filtered_rows_saved,mean_similarity,median_similarity,min_similarity,max_similarity,filtered_output
-data\train_high_quality_10k.csv,1000,800,0.3976,0.3957,-0.1328,0.9295,data\train_semantic_filtered_800.csv
+data\train_high_quality_10k.csv,10000,8000,0.4001,0.3967,-0.2038,1.0,data\train_semantic_filtered_8000.csv
