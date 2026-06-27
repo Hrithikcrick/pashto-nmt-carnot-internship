@@ -226,3 +226,28 @@ The next research stage focuses on improving the Pashto Neural Machine Translati
 - `outputs/tables/manual_evaluation_baseline_vs_finetuned_template.csv`
 - `outputs/figures/semantic_similarity_distribution.png`
 
+
+## Week 5 Research Work: Semantic Filtering and Manual Evaluation
+
+This stage extends the Pashto Neural Machine Translation research beyond initial LoRA fine-tuning.
+
+### Work Added
+
+- Semantic similarity filtering using multilingual sentence embeddings.
+- Semantically filtered Pashto-English training data generation.
+- Semantic similarity score table and distribution graph.
+- Manual evaluation template for baseline vs fine-tuned translation comparison.
+- Error analysis plan for missing words, hallucination, named entity errors, tense/gender errors, and fluency issues.
+- Direct Pashto-to-Hindi vs pivot Pashto-English-Hindi comparison planning.
+- Future IndicTrans2 exploration for English-to-Hindi translation.
+
+### New Files
+
+- `src/week5_semantic_filter.py`
+- `src/week5_create_manual_eval_template.py`
+- `src/week5_generate_report.py`
+- `src/week5_work_status.py`
+- `docs/week5_research_work.md`
+- `outputs/tables/week5_work_status.csv`
+- `outputs/figures/week5_work_status.png`
+

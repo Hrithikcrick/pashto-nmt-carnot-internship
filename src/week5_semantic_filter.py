@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 
 def find_col(df, names):
     low = {c.lower().strip(): c for c in df.columns}
@@ -16,28 +15,25 @@ def find_col(df, names):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="data/train_high_quality_10k.csv")
-    parser.add_argument("--output", default="data/train_semantic_filtered.csv")
-    parser.add_argument("--score_output", default="outputs/tables/semantic_similarity_scores.csv")
-    parser.add_argument("--figure", default="outputs/figures/semantic_similarity_distribution.png")
-    parser.add_argument("--model", default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    parser.add_argument("--output", default="data/train_semantic_filtered_8000.csv")
     parser.add_argument("--max_rows", type=int, default=10000)
     parser.add_argument("--top_k", type=int, default=8000)
-    parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--batch_size", type=int, default=16)
+    parser.add_argument("--model", default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     args = parser.parse_args()
 
     os.makedirs("outputs/tables", exist_ok=True)
     os.makedirs("outputs/figures", exist_ok=True)
     os.makedirs("data", exist_ok=True)
 
-    print("Reading:", args.input)
     df = pd.read_csv(args.input)
 
     pcol = find_col(df, ["pashto", "ps", "source", "pbt", "input"])
     ecol = find_col(df, ["english", "en", "target", "eng", "reference", "english_reference"])
 
     if pcol is None or ecol is None:
-        print("Could not detect Pashto/English columns.")
-        print("Columns:", list(df.columns))
+        print("Could not detect Pashto and English columns.")
+        print("Columns found:", list(df.columns))
         return
 
     df = df[[pcol, ecol]].dropna().copy()
@@ -46,16 +42,17 @@ def main():
     if args.max_rows > 0:
         df = df.head(args.max_rows)
 
-    print("Rows used:", len(df))
-    print("Loading embedding model:", args.model)
+    print("Total rows for semantic scoring:", len(df))
+    print("Loading multilingual embedding model:", args.model)
+
     model = SentenceTransformer(args.model)
 
-    pashto_texts = df["pashto"].astype(str).tolist()
-    english_texts = df["english"].astype(str).tolist()
+    ps_texts = df["pashto"].astype(str).tolist()
+    en_texts = df["english"].astype(str).tolist()
 
     print("Encoding Pashto sentences...")
-    emb_ps = model.encode(
-        pashto_texts,
+    ps_emb = model.encode(
+        ps_texts,
         batch_size=args.batch_size,
         show_progress_bar=True,
         convert_to_numpy=True,
@@ -63,19 +60,19 @@ def main():
     )
 
     print("Encoding English sentences...")
-    emb_en = model.encode(
-        english_texts,
+    en_emb = model.encode(
+        en_texts,
         batch_size=args.batch_size,
         show_progress_bar=True,
         convert_to_numpy=True,
         normalize_embeddings=True
     )
 
-    scores = np.sum(emb_ps * emb_en, axis=1)
+    scores = np.sum(ps_emb * en_emb, axis=1)
     df["semantic_similarity"] = scores
 
     df = df.sort_values("semantic_similarity", ascending=False).reset_index(drop=True)
-    df.to_csv(args.score_output, index=False, encoding="utf-8-sig")
+    df.to_csv("outputs/tables/week5_semantic_similarity_scores.csv", index=False, encoding="utf-8-sig")
 
     filtered = df.head(args.top_k).copy()
     filtered.to_csv(args.output, index=False, encoding="utf-8-sig")
@@ -88,28 +85,27 @@ def main():
         "median_similarity": round(float(np.median(scores)), 4),
         "min_similarity": round(float(np.min(scores)), 4),
         "max_similarity": round(float(np.max(scores)), 4),
-        "output_file": args.output
+        "filtered_output": args.output
     }])
 
-    summary.to_csv("outputs/tables/semantic_filtering_summary.csv", index=False)
+    summary.to_csv("outputs/tables/week5_semantic_filtering_summary.csv", index=False)
 
     plt.figure(figsize=(9, 5))
     plt.hist(scores, bins=40)
-    plt.title("Semantic Similarity Distribution")
+    plt.title("Week 5 Semantic Similarity Distribution")
     plt.xlabel("Cosine similarity")
-    plt.ylabel("Number of sentence pairs")
+    plt.ylabel("Sentence pair count")
     plt.tight_layout()
-    plt.savefig(args.figure, dpi=300)
+    plt.savefig("outputs/figures/week5_semantic_similarity_distribution.png", dpi=300)
     plt.close()
 
-    top_preview = filtered.head(20)
-    top_preview.to_csv("outputs/tables/semantic_filtered_top20_preview.csv", index=False, encoding="utf-8-sig")
+    top20 = filtered.head(20)
+    top20.to_csv("outputs/tables/week5_top20_semantic_filtered_preview.csv", index=False, encoding="utf-8-sig")
 
     print("Semantic filtering completed.")
-    print("Saved scored file:", args.score_output)
-    print("Saved filtered file:", args.output)
-    print("Saved summary: outputs/tables/semantic_filtering_summary.csv")
-    print("Saved figure:", args.figure)
+    print("Saved filtered data:", args.output)
+    print("Saved summary: outputs/tables/week5_semantic_filtering_summary.csv")
+    print("Saved graph: outputs/figures/week5_semantic_similarity_distribution.png")
 
 if __name__ == "__main__":
     main()
