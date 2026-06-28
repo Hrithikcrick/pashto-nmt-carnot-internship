@@ -1,0 +1,6 @@
+remaining_work,status,priority
+Manually score selected baseline and fine-tuned translations,pending,high
+Train LoRA again using semantically filtered data,pending,high
+"Compare baseline, original LoRA, and semantic-filtered LoRA checkpoints",pending,high
+Compare direct Pashto-to-Hindi with pivot Pashto-English-Hindi translation,pending,medium
+Explore IndicTrans2 for English-to-Hindi stage,pending,medium

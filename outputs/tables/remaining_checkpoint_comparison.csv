@@ -1,0 +1,9 @@
+model,samples,BLEU,chrF,score_file,model_short
+facebook/nllb-200-distilled-600M,100,19.63,37.91,outputs\tables\week4_scores_facebook_nllb-200-distilled-600M.csv,Baseline NLLB
+models\nllb_lora_trial_20,100,19.63,37.91,outputs\tables\week4_scores_models_nllb_lora_trial_20.csv,LoRA 20
+models\nllb_lora_trial_100,100,19.65,37.97,outputs\tables\week4_scores_models_nllb_lora_trial_100.csv,LoRA 100
+models\nllb_lora_trial_500,100,20.09,38.27,outputs\tables\week4_scores_models_nllb_lora_trial_500.csv,LoRA 500
+models\nllb_lora_trial_1000,100,19.79,38.33,outputs\tables\week4_scores_models_nllb_lora_trial_1000.csv,LoRA 1000
+models\nllb_lora_trial_3000,100,19.7,38.49,outputs\tables\week4_scores_models_nllb_lora_trial_3000.csv,LoRA 3000
+models\nllb_lora_10k_cpu,100,19.77,38.76,outputs\tables\week4_scores_models_nllb_lora_10k_cpu.csv,Original LoRA 10k
+models\nllb_lora_semantic_filtered_8000,100,20.38,39.02,outputs\tables\week4_scores_models_nllb_lora_semantic_filtered_8000.csv,Semantic-filtered LoRA 8000

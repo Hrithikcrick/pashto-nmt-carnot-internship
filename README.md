@@ -266,3 +266,42 @@ Manual evaluation is also important because automatic metrics such as BLEU and c
 - Compare baseline, original LoRA, and semantic-filtered LoRA checkpoints.
 - Compare direct Pashto-to-Hindi translation with pivot Pashto-English-Hindi translation.
 - Explore IndicTrans2 for the English-to-Hindi stage.
+
+## Remaining Research Work Results
+
+The remaining research pipeline has now been extended beyond initial LoRA fine-tuning and semantic filtering.
+
+### Completed Remaining Work
+
+- Created manual scoring template for selected baseline and fine-tuned translations.
+- Trained LoRA again using semantically filtered Pashto-English data.
+- Evaluated the semantic-filtered LoRA checkpoint.
+- Generated checkpoint comparison between baseline, original LoRA, and semantic-filtered LoRA outputs.
+- Created direct Pashto-to-Hindi vs pivot Pashto-English-Hindi comparison file.
+- Added IndicTrans2 exploration note for the English-to-Hindi stage.
+
+### Important Remaining-Work Files
+
+- `outputs/tables/remaining_manual_scoring_template.csv`
+- `outputs/tables/remaining_semantic_lora_8000_predictions.csv`
+- `outputs/tables/remaining_checkpoint_comparison.csv`
+- `outputs/tables/remaining_direct_vs_pivot_hindi.csv`
+- `outputs/figures/remaining_chrf_checkpoint_comparison.png`
+- `outputs/figures/remaining_bleu_checkpoint_comparison.png`
+- `docs/remaining_checkpoint_comparison.md`
+- `docs/remaining_indictrans2_exploration.md`
+
+### Remaining-Work Graphs
+
+![Remaining chrF Checkpoint Comparison](outputs/figures/remaining_chrf_checkpoint_comparison.png)
+
+![Remaining BLEU Checkpoint Comparison](outputs/figures/remaining_bleu_checkpoint_comparison.png)
+
+### Interpretation
+
+The semantic-filtered LoRA experiment checks whether cleaner sentence-pair selection improves translation quality compared with the baseline and earlier LoRA checkpoints.
+
+The direct-vs-pivot Hindi comparison file is prepared for manual review. This will help decide whether direct Pashto-to-Hindi translation or Pashto-to-English-to-Hindi pivot translation gives more natural and meaning-preserving Hindi outputs.
+
+IndicTrans2 remains the next planned improvement for the English-to-Hindi stage.
+
