@@ -234,7 +234,7 @@ This graph summarizes the mean, median, minimum, and maximum semantic similarity
 
 ![Week 5 Work Status](outputs/figures/week5_work_status.png)
 
-This graph tracks completed and pending research tasks. Semantic filtering and evaluation-template preparation are completed, while human scoring, direct-vs-pivot Hindi evaluation, and IndicTrans2 integration remain future work.
+This graph tracks the updated remaining research status. Semantic filtering, filtered-data generation, semantic-filtered LoRA evaluation, checkpoint comparison, direct-vs-pivot Hindi comparison, and IndicTrans2 exploration note are completed. Manual human scoring is the main remaining task.
 
 ### Week 5 Important Files
 
@@ -304,4 +304,25 @@ The semantic-filtered LoRA experiment checks whether cleaner sentence-pair selec
 The direct-vs-pivot Hindi comparison file is prepared for manual review. This will help decide whether direct Pashto-to-Hindi translation or Pashto-to-English-to-Hindi pivot translation gives more natural and meaning-preserving Hindi outputs.
 
 IndicTrans2 remains the next planned improvement for the English-to-Hindi stage.
+
+
+### Updated Remaining Research Status
+
+The remaining research work has been updated after completing the semantic-filtered LoRA experiment and direct-vs-pivot Hindi comparison.
+
+Completed items:
+
+- Semantic similarity filtering.
+- Semantically filtered dataset generation.
+- LoRA training using semantically filtered data.
+- Semantic-filtered LoRA evaluation.
+- Baseline vs original LoRA vs semantic-filtered LoRA checkpoint comparison.
+- Direct Pashto-to-Hindi vs pivot Pashto-English-Hindi comparison.
+- IndicTrans2 exploration note for the English-to-Hindi stage.
+
+Pending item:
+
+- Manual human scoring of selected baseline, fine-tuned, and Hindi translation outputs.
+
+![Updated Remaining Research Work Status](outputs/figures/remaining_work_updated_status.png)
 
