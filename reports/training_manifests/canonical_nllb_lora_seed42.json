@@ -1,38 +1,28 @@
 {
     "status": "validated",
-    "run_name": "canonical_nllb_lora",
-    "seed": 42,
-    "model_name": "facebook/nllb-200-distilled-600M",
-    "arguments": {
-        "train_file": "data/splits/pilot_train.csv",
-        "validation_file": "data/splits/pilot_validation.csv",
-        "test_file": "data/splits/pilot_test.csv",
-        "model_name": "facebook/nllb-200-distilled-600M",
-        "output_dir": "models/research_nllb_lora_seed42",
-        "run_name": "canonical_nllb_lora",
+    "experiment_name": "canonical_nllb_lora",
+    "model": {
+        "name": "facebook/nllb-200-distilled-600M",
+        "source_language": "pbt_Arab",
+        "target_language": "eng_Latn"
+    },
+    "training_configuration": {
         "seed": 42,
-        "epochs": 2.0,
-        "batch_size": 2,
-        "gradient_accumulation_steps": 4,
-        "lr": 0.0002,
-        "max_length": 128,
-        "max_train_rows": 0,
-        "max_validation_rows": 0,
-        "lora_r": 8,
+        "method": "LoRA",
+        "lora_rank": 8,
         "lora_alpha": 16,
         "lora_dropout": 0.05,
-        "logging_steps": 50,
-        "save_total_limit": 2,
-        "gradient_checkpointing": false,
-        "validate_only": true
+        "learning_rate": 0.0002,
+        "epochs": 2,
+        "batch_size": 2,
+        "gradient_accumulation_steps": 4,
+        "maximum_sequence_length": 128
     },
     "datasets": {
         "train": {
             "path": "data\\splits\\pilot_train.csv",
             "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_train.csv",
             "rows": 9002,
-            "pashto_column": "pashto",
-            "english_column": "english",
             "unique_pashto_sources": 8639,
             "unique_english_targets": 8858,
             "unique_pairs": 9002,
@@ -42,8 +32,6 @@
             "path": "data\\splits\\pilot_validation.csv",
             "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_validation.csv",
             "rows": 987,
-            "pashto_column": "pashto",
-            "english_column": "english",
             "unique_pashto_sources": 960,
             "unique_english_targets": 983,
             "unique_pairs": 987,
@@ -53,8 +41,6 @@
             "path": "data\\splits\\pilot_test.csv",
             "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_test.csv",
             "rows": 100,
-            "pashto_column": "pashto",
-            "english_column": "english",
             "unique_pashto_sources": 100,
             "unique_english_targets": 100,
             "unique_pairs": 100,
@@ -79,15 +65,17 @@
         }
     },
     "environment": {
-        "packages": {
+        "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+        "operating_system": "Windows-10-10.0.26200-SP0",
+        "package_versions": {
             "torch": "2.13.0",
             "transformers": "4.57.6",
             "peft": "0.20.0",
             "datasets": "5.0.1",
             "pandas": "3.0.5",
-            "numpy": "1.26.4"
-        },
-        "cuda_available": false,
-        "device": "CPU"
+            "numpy": "1.26.4",
+            "sacrebleu": "2.6.0",
+            "unbabel-comet": "2.2.7"
+        }
     }
 }
