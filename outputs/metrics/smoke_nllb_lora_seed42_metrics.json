@@ -1,0 +1,16 @@
+{
+    "samples": 20,
+    "BLEU": 14.566518,
+    "chrF++": 27.944296,
+    "TER": 80.660377,
+    "empty_outputs": 0,
+    "status": "inference_completed",
+    "purpose": "pipeline_smoke_check",
+    "base_model": "facebook/nllb-200-distilled-600M",
+    "adapter_directory": "models\\research\\smoke_nllb_lora_seed42",
+    "device": "cpu",
+    "batch_size": 2,
+    "num_beams": 4,
+    "elapsed_seconds": 137.0533,
+    "seconds_per_sentence": 6.8527
+}
