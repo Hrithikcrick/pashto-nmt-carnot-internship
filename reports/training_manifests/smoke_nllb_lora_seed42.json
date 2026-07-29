@@ -1,0 +1,107 @@
+{
+    "status": "training_completed",
+    "run_name": "smoke_nllb_lora",
+    "seed": 42,
+    "model_name": "facebook/nllb-200-distilled-600M",
+    "arguments": {
+        "train_file": "data\\splits\\pilot_train.csv",
+        "validation_file": "data\\splits\\pilot_validation.csv",
+        "test_file": "data\\splits\\pilot_test.csv",
+        "model_name": "facebook/nllb-200-distilled-600M",
+        "output_dir": "models\\research\\smoke_nllb_lora_seed42",
+        "run_name": "smoke_nllb_lora",
+        "seed": 42,
+        "epochs": 0.1,
+        "batch_size": 1,
+        "gradient_accumulation_steps": 1,
+        "lr": 0.0002,
+        "max_length": 128,
+        "max_train_rows": 100,
+        "max_validation_rows": 20,
+        "lora_r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "logging_steps": 5,
+        "save_total_limit": 1,
+        "gradient_checkpointing": false,
+        "validate_only": false
+    },
+    "datasets": {
+        "train": {
+            "path": "data\\splits\\pilot_train.csv",
+            "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_train.csv",
+            "rows": 100,
+            "pashto_column": "pashto",
+            "english_column": "english",
+            "unique_pashto_sources": 100,
+            "unique_english_targets": 100,
+            "unique_pairs": 100,
+            "sha256": "1b99d665a86cce68cc7421773ac93560cd8d7de875caea6fad9cffdc1853fa61"
+        },
+        "validation": {
+            "path": "data\\splits\\pilot_validation.csv",
+            "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_validation.csv",
+            "rows": 20,
+            "pashto_column": "pashto",
+            "english_column": "english",
+            "unique_pashto_sources": 20,
+            "unique_english_targets": 20,
+            "unique_pairs": 20,
+            "sha256": "5b706dfa818f16d5fb44b5f7978705ba37bc74251487dfd5acd0112c035f1f3e"
+        },
+        "test": {
+            "path": "data\\splits\\pilot_test.csv",
+            "absolute_path": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\data\\splits\\pilot_test.csv",
+            "rows": 100,
+            "pashto_column": "pashto",
+            "english_column": "english",
+            "unique_pashto_sources": 100,
+            "unique_english_targets": 100,
+            "unique_pairs": 100,
+            "sha256": "ed83c08c49add17a6e7f9063aea36c60fb66003445d2935bbc8545a90823f7e6"
+        }
+    },
+    "overlap_verification": {
+        "train_vs_validation": {
+            "exact_pair_overlap": 0,
+            "pashto_source_overlap": 0,
+            "english_target_overlap": 0
+        },
+        "train_vs_test": {
+            "exact_pair_overlap": 0,
+            "pashto_source_overlap": 0,
+            "english_target_overlap": 0
+        },
+        "validation_vs_test": {
+            "exact_pair_overlap": 0,
+            "pashto_source_overlap": 0,
+            "english_target_overlap": 0
+        }
+    },
+    "environment": {
+        "packages": {
+            "torch": "2.13.0",
+            "transformers": "4.57.6",
+            "peft": "0.20.0",
+            "datasets": "5.0.1",
+            "pandas": "3.0.5",
+            "numpy": "1.26.4"
+        },
+        "cuda_available": false,
+        "device": "CPU"
+    },
+    "training": {
+        "elapsed_seconds": 33.96958136558533,
+        "best_metric": 2.225752830505371,
+        "best_model_checkpoint": "models\\research\\smoke_nllb_lora_seed42\\checkpoint-10",
+        "train_metrics": {
+            "train_runtime": 33.7933,
+            "train_samples_per_second": 0.296,
+            "train_steps_per_second": 0.296,
+            "total_flos": 1426918735872.0,
+            "train_loss": 3.12339563369751,
+            "epoch": 0.1
+        },
+        "output_directory": "models\\research\\smoke_nllb_lora_seed42"
+    }
+}

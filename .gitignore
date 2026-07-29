@@ -18,3 +18,5 @@ data/*
 *.zip
 *.tar
 *.gz
+models/research/
+logs/*.log
