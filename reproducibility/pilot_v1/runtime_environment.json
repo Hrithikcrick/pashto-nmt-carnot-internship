@@ -1,0 +1,20 @@
+{
+    "snapshot_name": "pilot-study-v1",
+    "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "python_executable": "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\venv\\Scripts\\python.exe",
+    "operating_system": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "package_versions": {
+        "torch": "2.13.0",
+        "transformers": "4.57.6",
+        "peft": "0.20.0",
+        "datasets": "5.0.1",
+        "pandas": "3.0.5",
+        "numpy": "1.26.4",
+        "sacrebleu": "2.6.0",
+        "unbabel-comet": "2.2.7",
+        "pytorch-lightning": "2.6.5",
+        "torchmetrics": "0.10.3"
+    }
+}
