@@ -1,0 +1,37 @@
+﻿========== MAIN METRICS ==========
+model,samples,BLEU,chrF++,TER,COMET,COMETKiwi_QE
+Baseline NLLB,100,19.625554,35.482647,75.675676,0.681784,
+Original LoRA,100,19.768717,36.306458,76.833977,0.677456,
+Semantic LoRA,100,20.375461,36.607515,76.447876,0.681866,
+
+========== STATISTICAL SIGNIFICANCE ==========
+metric,baseline,comparison_model,mean_difference_model_minus_baseline,bootstrap_95_ci_low,bootstrap_95_ci_high,p_value,significant_at_0.05
+BLEU,Baseline NLLB,Original LoRA,1.130147,-0.502166,2.758014,0.1804,False
+BLEU,Baseline NLLB,Semantic LoRA,1.885012,0.147212,3.708856,0.0328,True
+chrF++,Baseline NLLB,Original LoRA,0.810252,-0.604213,2.086312,0.2476,False
+chrF++,Baseline NLLB,Semantic LoRA,1.151155,-0.297291,2.465657,0.1148,False
+TER,Baseline NLLB,Original LoRA,4.070155,-12.994621,2.899298,0.3408,False
+TER,Baseline NLLB,Semantic LoRA,2.772795,-13.154029,4.542028,0.6112,False
+COMET,Baseline NLLB,Original LoRA,-0.004329,-0.014665,0.006355,0.4196,False
+COMET,Baseline NLLB,Semantic LoRA,8.2e-05,-0.010247,0.010115,0.9744,False
+
+========== PAIRWISE WINS ==========
+metric,system_a,system_b,system_a_wins,system_b_wins,ties,mean_difference_b_minus_a,difference_95_ci_low,difference_95_ci_high,p_value,significant_at_0.05
+BLEU,Baseline NLLB,Original LoRA,19,36,45,1.130147,-0.502166,2.758014,0.1804,False
+BLEU,Baseline NLLB,Semantic LoRA,24,31,45,1.885012,0.147212,3.708856,0.0328,True
+BLEU,Original LoRA,Semantic LoRA,18,13,69,0.754865,-0.307774,2.128053,0.19,False
+chrF++,Baseline NLLB,Original LoRA,29,48,23,0.810252,-0.604213,2.086312,0.2476,False
+chrF++,Baseline NLLB,Semantic LoRA,30,43,27,1.151155,-0.297291,2.465657,0.1148,False
+chrF++,Original LoRA,Semantic LoRA,26,22,52,0.340903,-0.381553,1.105679,0.3696,False
+TER,Baseline NLLB,Original LoRA,28,21,51,4.070155,-2.899298,12.994621,0.3408,False
+TER,Baseline NLLB,Semantic LoRA,28,18,54,2.772795,-4.542028,13.154029,0.6112,False
+TER,Original LoRA,Semantic LoRA,17,11,72,-1.29736,-8.335954,5.14015,0.7536,False
+COMET,Baseline NLLB,Original LoRA,38,43,23,-0.004329,-0.014665,0.006355,0.4196,False
+COMET,Baseline NLLB,Semantic LoRA,38,35,27,8.2e-05,-0.010247,0.010115,0.9744,False
+COMET,Original LoRA,Semantic LoRA,29,24,52,0.004411,-0.001836,0.010735,0.1648,False
+
+========== AUTOMATIC DIAGNOSTICS ==========
+model,samples,mean_length_ratio,number_mismatch_rate_percent,length_outlier_rate_percent,repetition_alert_rate_percent,empty_output_rate_percent,exact_reference_match_percent
+Baseline NLLB,100,0.983748,15.0,4.0,0.0,0.0,1.0
+Original LoRA,100,1.053202,15.0,4.0,0.0,0.0,2.0
+Semantic LoRA,100,1.036555,15.0,5.0,0.0,0.0,3.0

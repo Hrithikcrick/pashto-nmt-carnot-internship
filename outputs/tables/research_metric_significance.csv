@@ -1,0 +1,9 @@
+﻿metric,baseline,comparison_model,mean_difference_model_minus_baseline,bootstrap_95_ci_low,bootstrap_95_ci_high,p_value,significant_at_0.05
+BLEU,Baseline NLLB,Original LoRA,1.130147,-0.502166,2.758014,0.1804,False
+BLEU,Baseline NLLB,Semantic LoRA,1.885012,0.147212,3.708856,0.0328,True
+chrF++,Baseline NLLB,Original LoRA,0.810252,-0.604213,2.086312,0.2476,False
+chrF++,Baseline NLLB,Semantic LoRA,1.151155,-0.297291,2.465657,0.1148,False
+TER,Baseline NLLB,Original LoRA,4.070155,-12.994621,2.899298,0.3408,False
+TER,Baseline NLLB,Semantic LoRA,2.772795,-13.154029,4.542028,0.6112,False
+COMET,Baseline NLLB,Original LoRA,-0.004329,-0.014665,0.006355,0.4196,False
+COMET,Baseline NLLB,Semantic LoRA,8.2e-05,-0.010247,0.010115,0.9744,False

@@ -1,0 +1,4 @@
+﻿model,samples,mean_length_ratio,number_mismatch_rate_percent,length_outlier_rate_percent,repetition_alert_rate_percent,empty_output_rate_percent,exact_reference_match_percent
+Baseline NLLB,100,0.983748,15.0,4.0,0.0,0.0,1.0
+Original LoRA,100,1.053202,15.0,4.0,0.0,0.0,2.0
+Semantic LoRA,100,1.036555,15.0,5.0,0.0,0.0,3.0
