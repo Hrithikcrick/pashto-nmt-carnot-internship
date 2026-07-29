@@ -1,0 +1,4 @@
+﻿split,file,rows,unique_pairs,seed
+train,data\splits\pilot_train.csv,9002,9002,42
+validation,data\splits\pilot_validation.csv,987,987,42
+test,data\splits\pilot_test.csv,100,100,

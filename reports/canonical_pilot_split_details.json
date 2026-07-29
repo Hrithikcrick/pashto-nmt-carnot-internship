@@ -1,0 +1,32 @@
+{
+    "seed": 42,
+    "train_fraction": 0.9,
+    "training_input": "data\\train_high_quality_10k.csv",
+    "test_input": "data\\gold_test_candidates_100.csv",
+    "training_input_usable_rows": 10000,
+    "test_input_usable_rows": 100,
+    "training_duplicate_pairs_removed": 1,
+    "test_duplicate_pairs_removed": 0,
+    "exact_test_pairs_removed_from_training": 8,
+    "additional_same_source_rows_removed_from_training": 2,
+    "final_train_rows": 9002,
+    "final_validation_rows": 987,
+    "final_test_rows": 100,
+    "comparisons": {
+        "train_vs_validation": {
+            "exact_pair_overlap": 0,
+            "source_overlap": 0,
+            "target_overlap": 28
+        },
+        "train_vs_test": {
+            "exact_pair_overlap": 0,
+            "source_overlap": 0,
+            "target_overlap": 0
+        },
+        "validation_vs_test": {
+            "exact_pair_overlap": 0,
+            "source_overlap": 0,
+            "target_overlap": 0
+        }
+    }
+}
