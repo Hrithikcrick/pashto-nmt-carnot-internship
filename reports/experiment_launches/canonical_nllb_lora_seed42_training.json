@@ -1,0 +1,66 @@
+{
+    "experiment_id": "canonical_nllb_lora_seed42",
+    "mode": "training",
+    "status": "validated",
+    "timestamp_utc": "2026-07-29T19:29:54.456516+00:00",
+    "configuration_file": "configs\\experiments\\canonical_nllb_lora_seed42.json",
+    "seed": 42,
+    "dataset_verification": {
+        "train": {
+            "path": "data\\splits\\pilot_train.csv",
+            "sha256": "1b99d665a86cce68cc7421773ac93560cd8d7de875caea6fad9cffdc1853fa61",
+            "size_bytes": 4584568,
+            "status": "verified"
+        },
+        "validation": {
+            "path": "data\\splits\\pilot_validation.csv",
+            "sha256": "5b706dfa818f16d5fb44b5f7978705ba37bc74251487dfd5acd0112c035f1f3e",
+            "size_bytes": 502890,
+            "status": "verified"
+        },
+        "test": {
+            "path": "data\\splits\\pilot_test.csv",
+            "sha256": "ed83c08c49add17a6e7f9063aea36c60fb66003445d2935bbc8545a90823f7e6",
+            "size_bytes": 16335,
+            "status": "verified"
+        }
+    },
+    "command": [
+        "C:\\Users\\HRITHIK SHARMA\\pashto-nmt-carnot-internship\\venv\\Scripts\\python.exe",
+        "src\\finetune_nllb_lora.py",
+        "--train_file",
+        "data\\splits\\pilot_train.csv",
+        "--validation_file",
+        "data\\splits\\pilot_validation.csv",
+        "--test_file",
+        "data\\splits\\pilot_test.csv",
+        "--model_name",
+        "facebook/nllb-200-distilled-600M",
+        "--output_dir",
+        "models/research/canonical_nllb_lora_seed42",
+        "--run_name",
+        "canonical_nllb_lora_seed42",
+        "--seed",
+        "42",
+        "--epochs",
+        "2.0",
+        "--batch_size",
+        "2",
+        "--gradient_accumulation_steps",
+        "4",
+        "--lr",
+        "0.0002",
+        "--max_length",
+        "128",
+        "--lora_r",
+        "8",
+        "--lora_alpha",
+        "16",
+        "--lora_dropout",
+        "0.05",
+        "--logging_steps",
+        "50",
+        "--save_total_limit",
+        "2"
+    ]
+}

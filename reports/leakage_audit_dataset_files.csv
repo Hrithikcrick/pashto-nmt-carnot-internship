@@ -1,0 +1,75 @@
+﻿file,detected_split,audit_group,original_rows,usable_parallel_rows,unique_pairs,duplicate_pairs,source_column,target_column,status,error
+data\gold_test_100_template.csv,test,test,100,0,0,0,pashto,english_reference,included,
+data\gold_test_candidates_100.csv,test,test,100,100,100,0,pashto,english,included,
+data\train_high_quality_10k.csv,derived_train,train,10000,10000,9998,2,pashto,english,included,
+data\train_semantic_filtered_800.csv,derived_train,train,800,800,800,0,pashto,english,included,
+data\train_semantic_filtered_8000.csv,derived_train,train,8000,8000,7998,2,pashto,english,included,
+outputs\tables\baseline_metrics.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\conference_blinded_human_evaluation.csv,test,test,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\conference_model_metrics_with_ci.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\conference_paired_bootstrap_significance.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\conference_predictions_combined.csv,test,test,100,100,100,0,source,reference,included,
+outputs\tables\conference_sentence_level_analysis.csv,unknown,unknown,100,100,100,0,source,reference,included,
+outputs\tables\dataset_cleaning_summary.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\inference_time.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\manual_evaluation_baseline_vs_finetuned_template.csv,test,test,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\manual_evaluation_template.csv,test,test,50,0,0,0,pashto,reference_english,included,
+outputs\tables\model_comparison_plan.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\remaining_checkpoint_comparison.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\remaining_direct_vs_pivot_hindi.csv,unknown,unknown,10,10,10,0,pashto,english,included,
+outputs\tables\remaining_manual_scoring_template.csv,unknown,unknown,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\remaining_semantic_lora_8000_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\remaining_work_progress.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\remaining_work_status.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\remaining_work_updated_status.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_automatic_diagnostics.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_automatic_metrics.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_human_evaluation_filled.csv,test,test,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\research_human_evaluation_form.csv,test,test,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\research_human_evaluation_key.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_metric_significance.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_pairwise_wins.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_predictions_combined.csv,test,test,100,100,100,0,source,reference,included,
+outputs\tables\research_progress.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\research_sentence_scores.csv,unknown,unknown,100,100,100,0,source,reference,included,
+outputs\tables\semantic_filtered_top20_preview.csv,derived_train,train,20,20,20,0,pashto,english,included,
+outputs\tables\semantic_filtering_summary.csv,derived_train,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\semantic_similarity_scores.csv,derived_train,train,10000,10000,9998,2,pashto,english,included,
+outputs\tables\train_val_test_split.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_clean_test_baseline_scores.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_clean_test_baseline_scores_copy.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_clean_test_metric_plot_data.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_dataset_files_summary.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_error_type_counts.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_final_clean_test_scores.csv,test,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_final_dataset_summary.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_final_error_type_counts.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_final_score_plot_data.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_final_status.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_high_quality_subset_summary.csv,derived_train,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week3_manual_error_analysis_clean_test.csv,test,test,50,50,50,0,pashto,reference_english,included,
+outputs\tables\week3_status_summary.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_baseline_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_1000_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_100_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_10k_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_20_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_3000_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_lora_500_predictions.csv,test,test,100,100,100,0,pashto,english,included,
+outputs\tables\week4_model_comparison.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_facebook_nllb-200-distilled-600M.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_10k_cpu.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_semantic_filtered_8000.csv,derived_train,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_trial_100.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_trial_1000.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_trial_20.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_trial_3000.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week4_scores_models_nllb_lora_trial_500.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week5_filtering_overview.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week5_manual_evaluation_template.csv,test,test,50,50,50,0,pashto_source,english_reference,included,
+outputs\tables\week5_semantic_filtering_summary.csv,derived_train,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week5_semantic_similarity_scores.csv,derived_train,train,10000,10000,9998,2,pashto,english,included,
+outputs\tables\week5_similarity_score_stats.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.
+outputs\tables\week5_top20_semantic_filtered_preview.csv,derived_train,train,20,20,20,0,pashto,english,included,
+outputs\tables\week5_top_bottom_similarity_examples.csv,unknown,unknown,20,20,20,0,pashto,english,included,
+outputs\tables\week5_work_status.csv,unknown,,,,,,,,skipped,No Pashto/source column detected.

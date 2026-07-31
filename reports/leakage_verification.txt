@@ -1,0 +1,298 @@
+﻿========== LEAKAGE SUMMARY ==========
+comparison,rows_a,rows_b,unique_pairs_a,unique_pairs_b,exact_pair_overlap,source_overlap,target_overlap,status
+train_vs_validation,38840,0,0,0,0,0,0,missing_split
+train_vs_test,38840,1400,9998,100,8,9,8,LEAKAGE_FOUND
+validation_vs_test,0,1400,0,0,0,0,0,missing_split
+
+========== DETECTED SPLIT FILES ==========
+
+
+file                 : data\gold_test_100_template.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 0
+unique_pairs         : 0
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english_reference
+status               : included
+
+file                 : data\gold_test_candidates_100.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : data\train_high_quality_10k.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 10000
+usable_parallel_rows : 10000
+unique_pairs         : 9998
+duplicate_pairs      : 2
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : data\train_semantic_filtered_800.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 800
+usable_parallel_rows : 800
+unique_pairs         : 800
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : data\train_semantic_filtered_8000.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 8000
+usable_parallel_rows : 8000
+unique_pairs         : 7998
+duplicate_pairs      : 2
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\conference_blinded_human_evaluation.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto_source
+target_column        : english_reference
+status               : included
+
+file                 : outputs\tables\conference_predictions_combined.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : source
+target_column        : reference
+status               : included
+
+file                 : outputs\tables\manual_evaluation_baseline_vs_finetuned_template.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto_source
+target_column        : english_reference
+status               : included
+
+file                 : outputs\tables\manual_evaluation_template.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 0
+unique_pairs         : 0
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : reference_english
+status               : included
+
+file                 : outputs\tables\remaining_semantic_lora_8000_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\research_human_evaluation_filled.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto_source
+target_column        : english_reference
+status               : included
+
+file                 : outputs\tables\research_human_evaluation_form.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto_source
+target_column        : english_reference
+status               : included
+
+file                 : outputs\tables\research_predictions_combined.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : source
+target_column        : reference
+status               : included
+
+file                 : outputs\tables\semantic_filtered_top20_preview.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 20
+usable_parallel_rows : 20
+unique_pairs         : 20
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\semantic_similarity_scores.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 10000
+usable_parallel_rows : 10000
+unique_pairs         : 9998
+duplicate_pairs      : 2
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week3_manual_error_analysis_clean_test.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : reference_english
+status               : included
+
+file                 : outputs\tables\week4_baseline_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_1000_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_100_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_10k_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_20_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_3000_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week4_lora_500_predictions.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 100
+usable_parallel_rows : 100
+unique_pairs         : 100
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week5_manual_evaluation_template.csv
+detected_split       : test
+audit_group          : test
+original_rows        : 50
+usable_parallel_rows : 50
+unique_pairs         : 50
+duplicate_pairs      : 0
+source_column        : pashto_source
+target_column        : english_reference
+status               : included
+
+file                 : outputs\tables\week5_semantic_similarity_scores.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 10000
+usable_parallel_rows : 10000
+unique_pairs         : 9998
+duplicate_pairs      : 2
+source_column        : pashto
+target_column        : english
+status               : included
+
+file                 : outputs\tables\week5_top20_semantic_filtered_preview.csv
+detected_split       : derived_train
+audit_group          : train
+original_rows        : 20
+usable_parallel_rows : 20
+unique_pairs         : 20
+duplicate_pairs      : 0
+source_column        : pashto
+target_column        : english
+status               : included
+
+
+
+

@@ -1,0 +1,802 @@
+\documentclass[conference]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{stfloats}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\setlength{\columnsep}{0.24in}
+
+\newcommand{\safeimage}[3]{
+\begin{figure*}[t]
+\centering
+\IfFileExists{#1}{
+    \includegraphics[width=#2\textwidth]{#1}
+}{
+    \fbox{\parbox{0.88\textwidth}{\centering Missing figure file: \texttt{#1}\\Upload this graph/image to Overleaf.}}
+}
+\caption{#3}
+\end{figure*}
+}
+
+\begin{document}
+
+\title{
+Quality-Aware Low-Resource Pashto Neural Machine Translation using NLLB, Semantic Filtering, LoRA Fine-Tuning, and Pivot-Based Hindi Translation
+}
+
+\author{
+\IEEEauthorblockN{Hrithik Sharma}
+\IEEEauthorblockA{
+Carnot Internship Research Project\\
+Artificial Intelligence and Machine Learning\\
+\href{https://github.com/Hrithikcrick/pashto-nmt-carnot-internship}{github.com/Hrithikcrick/pashto-nmt-carnot-internship}
+}
+}
+
+\maketitle
+
+\begin{abstract}
+Low-resource neural machine translation remains a difficult research problem because available parallel corpora are often limited, noisy, duplicated, domain-mismatched, and weakly aligned. This paper presents a quality-aware research pipeline for Pashto Neural Machine Translation (NMT) with three translation directions: Pashto-to-English, direct Pashto-to-Hindi, and pivot-based Pashto-to-English-to-Hindi translation. The system uses the pretrained \texttt{facebook/nllb-200-distilled-600M} model as the baseline and extends it through dataset cleaning, high-quality subset construction, semantic similarity filtering, gold test candidate preparation, manual error analysis, and LoRA-based parameter-efficient fine-tuning. From an initial WMT20 Pashto-English dataset of 93,498 sentence pairs, the cleaning pipeline produced 90,978 clean sentence pairs. A high-quality 10,000-pair subset, semantic-filtered subsets, and a 100-sample gold test candidate set were prepared for training and evaluation. The baseline NLLB model achieved BLEU 17.97 and chrF 36.49 on 100 Pashto-English examples. Initial LoRA and semantic-filtered LoRA experiments produced stable chrF values around 38--39, showing modest but consistent improvement over the baseline. The study demonstrates that careful data preparation, semantic filtering, and parameter-efficient adaptation can improve low-resource Pashto translation, while also highlighting the need for larger GPU-based training, stronger human evaluation, and improved Hindi generation using IndicTrans2.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Low-resource machine translation, Pashto, NLLB, LoRA, PEFT, Hugging Face, semantic filtering, BLEU, chrF, pivot translation, Hindi translation, IndicTrans2.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Neural Machine Translation (NMT) has significantly improved translation quality for high-resource languages such as English, French, German, Spanish, Hindi, and Chinese. Large multilingual models can now translate between hundreds of languages with reasonable fluency. However, low-resource languages still face major limitations because they do not have sufficient high-quality parallel corpora. Pashto is one such language. Although Pashto has millions of speakers, the amount of publicly available, clean, and evaluation-ready parallel data is much smaller than what is available for high-resource language pairs.
+
+The difficulty of Pashto translation is not only caused by limited dataset size. The quality of available data is equally important. Publicly available low-resource datasets often contain duplicated rows, very short sentence pairs, extremely long mismatched pairs, noisy web text, untranslated fragments, URL-heavy content, inconsistent script usage, and weak semantic alignment. If such data is used directly for training, the model may learn noisy mappings and produce incomplete, literal, or hallucinated translations.
+
+This paper presents a structured Pashto NMT research pipeline that uses a pretrained multilingual translation model, performs dataset cleaning, evaluates baseline translation quality, prepares high-quality subsets, applies semantic similarity filtering, integrates manual error analysis, and then applies LoRA-based parameter-efficient fine-tuning. The baseline model used in this work is \texttt{facebook/nllb-200-distilled-600M}. The project focuses primarily on Pashto-to-English translation because English references are available for automatic evaluation. Direct Pashto-to-Hindi and pivot-based Pashto-to-English-to-Hindi translation are also included as extended translation directions.
+
+The work is designed as a practical research pipeline rather than only a model training experiment. It includes dataset engineering, evaluation design, metric analysis, semantic filtering, error categorization, fine-tuning, Hindi comparison, and improvement planning. This is important because in low-resource NMT, model choice alone is not enough. Data quality, evaluation reliability, and error analysis strongly influence the final translation quality.
+
+\section{Motivation}
+
+Low-resource machine translation systems face several practical problems. A pretrained multilingual model may generate fluent output, but fluency does not always mean correctness. In Pashto translation, the model may omit important words, mistranslate named entities, change tense, produce overly literal English, or hallucinate content that is not present in the source sentence. These errors are especially harmful when translation is used for research, education, information access, or downstream multilingual applications.
+
+A second motivation is the need for Hindi translation. Direct Pashto-to-Hindi translation is difficult because high-quality Pashto-Hindi parallel data is limited. A pivot-based strategy can be more practical: Pashto is first translated into English, and then English is translated into Hindi. If the Pashto-to-English stage improves, the downstream Hindi translation can also improve.
+
+A third motivation is computational practicality. Full fine-tuning of large multilingual models is expensive. LoRA provides a practical solution by training only a small number of adapter parameters while keeping most pretrained model weights frozen. This makes fine-tuning possible under limited compute and storage constraints.
+
+\section{Research Questions}
+
+This work is guided by the following research questions:
+
+\begin{itemize}
+    \item How much noisy data can be removed from the raw Pashto-English dataset through rule-based cleaning?
+    \item How strong is the pretrained NLLB model as a Pashto-to-English baseline?
+    \item Can semantic similarity filtering improve the quality of the training subset?
+    \item Can LoRA fine-tuning improve chrF over the baseline model?
+    \item Does semantic-filtered LoRA perform better than original LoRA training?
+    \item Why is manual error analysis necessary beyond BLEU and chrF?
+    \item Is pivot-based Hindi translation more promising than direct Pashto-to-Hindi translation?
+    \item What further steps are required to move toward deployment-level translation quality?
+\end{itemize}
+
+\section{Research Contributions}
+
+The main contributions of this work are:
+
+\begin{enumerate}
+    \item A complete low-resource Pashto NMT pipeline using NLLB.
+    \item A cleaned Pashto-English dataset containing 90,978 sentence pairs.
+    \item A high-quality 10,000-pair subset for LoRA fine-tuning.
+    \item A semantic similarity filtering pipeline using multilingual sentence embeddings.
+    \item Semantic-filtered training subsets for stronger data-quality experiments.
+    \item A 100-sample gold test candidate set for evaluation.
+    \item Baseline Pashto-to-English evaluation using BLEU and chrF.
+    \item CPU inference-time comparison across Pashto-to-English, direct Pashto-to-Hindi, and pivot-based Hindi translation.
+    \item LoRA and semantic-filtered LoRA fine-tuning implementation using Hugging Face Transformers, Datasets, and PEFT.
+    \item Checkpoint comparison between baseline, original LoRA, and semantic-filtered LoRA models.
+    \item Direct Pashto-to-Hindi versus pivot Pashto-English-Hindi comparison.
+    \item IndicTrans2 exploration plan for improving English-to-Hindi translation.
+    \item Improved LoRA experiment design using cleaner semantic subsets and stronger adapter settings.
+\end{enumerate}
+
+\section{Related Work}
+
+Multilingual NMT has become an important direction for low-resource languages because a single model can share representations across many languages. The No Language Left Behind (NLLB) model was developed to improve translation coverage for more than 200 languages, including many low-resource languages \cite{nllb}. NLLB is suitable for this project because it supports Pashto, English, and Hindi with explicit language codes.
+
+LoRA, or Low-Rank Adaptation, is a parameter-efficient fine-tuning method that freezes the base model and introduces trainable low-rank matrices into selected layers \cite{lora}. This approach reduces trainable parameter count and makes adaptation practical under limited compute. In this project, LoRA is applied to selected attention projection modules of the NLLB model.
+
+BLEU is a widely used metric for machine translation evaluation \cite{bleu}. It measures n-gram overlap between generated translations and references. However, BLEU can be harsh for morphologically rich and low-resource settings. chrF, based on character n-gram F-score, can better reflect partial lexical and morphological similarity \cite{chrf}. Therefore, this project reports both BLEU and chrF.
+
+\section{System Overview}
+
+The complete research pipeline consists of the following stages:
+
+\begin{enumerate}
+    \item Collection of Pashto-English parallel data.
+    \item Conversion of raw data into structured CSV format.
+    \item Dataset cleaning and noise removal.
+    \item Train-validation-test split creation.
+    \item Baseline translation using NLLB.
+    \item Evaluation using BLEU, chrF, and inference time.
+    \item High-quality 10k subset construction.
+    \item Semantic similarity filtering.
+    \item Gold test candidate preparation.
+    \item LoRA-based fine-tuning.
+    \item Semantic-filtered LoRA fine-tuning.
+    \item Baseline versus fine-tuned checkpoint comparison.
+    \item Direct Hindi versus pivot Hindi comparison.
+    \item IndicTrans2 exploration for improved Hindi generation.
+    \item Improved LoRA experiment planning.
+\end{enumerate}
+
+\section{Dataset Preparation}
+
+\subsection{Raw Dataset}
+
+The project uses Pashto-English parallel data converted into CSV format. The raw dataset contained 93,498 sentence pairs. Each row contains a Pashto source sentence and an English target sentence.
+
+\subsection{Cleaning Strategy}
+
+The cleaning pipeline removes duplicate, noisy, and weakly useful rows. The cleaning rules include:
+
+\begin{itemize}
+    \item Removing empty rows.
+    \item Removing duplicate sentence pairs.
+    \item Removing URL-heavy and HTML-contaminated text.
+    \item Removing very short sentence pairs.
+    \item Removing extremely long sentence pairs.
+    \item Removing rows with extreme source-target length ratio.
+    \item Checking script consistency for Pashto and English text.
+\end{itemize}
+
+\subsection{Dataset Cleaning Summary}
+
+\begin{table}[H]
+\centering
+\caption{Dataset cleaning summary.}
+\begin{tabular}{lr}
+\toprule
+\textbf{Stage} & \textbf{Rows} \\
+\midrule
+Raw sentence pairs & 93,498 \\
+After duplicate removal & 93,418 \\
+Final clean sentence pairs & 90,978 \\
+Removed noisy rows & 2,440 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\safeimage{Screenshot 2026-06-25 104445.png}{0.95}{Dataset cleaning summary for the Pashto-English corpus. The figure shows that the pipeline reduces the raw corpus from 93,498 rows to 90,978 clean sentence pairs after duplicate and noise removal.}
+
+\section{Dataset Split}
+
+The cleaned dataset was divided into training, validation, and test splits. The training split contains 72,782 rows, while validation and test splits contain 9,098 rows each.
+
+\begin{table}[H]
+\centering
+\caption{Train-validation-test split.}
+\begin{tabular}{lr}
+\toprule
+\textbf{Split} & \textbf{Rows} \\
+\midrule
+Training & 72,782 \\
+Validation & 9,098 \\
+Test & 9,098 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\safeimage{Screenshot 2026-06-25 104458.png}{0.95}{Train-validation-test split of the cleaned Pashto-English dataset.}
+
+\section{Baseline Translation Model}
+
+\subsection{Model Selection}
+
+The baseline model used in this project is:
+
+\begin{center}
+\texttt{facebook/nllb-200-distilled-600M}
+\end{center}
+
+The model was selected because it supports multilingual translation across many languages, including Pashto, English, and Hindi. It provides a strong starting point for low-resource translation without training a model from scratch.
+
+\subsection{Language Codes}
+
+\begin{table}[H]
+\centering
+\caption{NLLB language codes used in this project.}
+\begin{tabular}{ll}
+\toprule
+\textbf{Language} & \textbf{NLLB Code} \\
+\midrule
+Pashto & \texttt{pbt\_Arab} \\
+English & \texttt{eng\_Latn} \\
+Hindi & \texttt{hin\_Deva} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Translation Directions}
+
+The system supports:
+
+\begin{itemize}
+    \item Pashto-to-English translation.
+    \item Direct Pashto-to-Hindi translation.
+    \item Pivot-based Pashto-to-English-to-Hindi translation.
+\end{itemize}
+
+\section{Baseline Evaluation}
+
+\subsection{Automatic Metrics}
+
+The baseline model was evaluated on 100 Pashto-English examples. BLEU and chrF were used as automatic evaluation metrics.
+
+\begin{table}[H]
+\centering
+\caption{Baseline NLLB Pashto-to-English evaluation.}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Model} & \textbf{BLEU} & \textbf{chrF} \\
+\midrule
+NLLB 600M & 17.97 & 36.49 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\safeimage{Screenshot 2026-06-25 104511.png}{0.88}{Baseline NLLB Pashto-to-English evaluation using BLEU and chrF.}
+
+\subsection{Inference-Time Analysis}
+
+Inference time was measured on CPU for three translation directions.
+
+\begin{table}[H]
+\centering
+\caption{Average CPU inference time.}
+\begin{tabular}{lr}
+\toprule
+\textbf{Translation Direction} & \textbf{Time per Sentence} \\
+\midrule
+Pashto-to-English & 4.46 sec \\
+Pashto-to-Hindi Direct & 5.11 sec \\
+Pashto-to-English-to-Hindi Pivot & 4.76 sec \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\safeimage{Screenshot 2026-06-25 104521.png}{0.92}{Average CPU inference time for Pashto-to-English, direct Pashto-to-Hindi, and pivot-based Pashto-to-English-to-Hindi translation.}
+
+\section{Dataset Quality Integration}
+
+\subsection{High-Quality Subset}
+
+A high-quality 10,000-pair subset was prepared from the cleaned dataset. This subset was selected for fine-tuning because training on a smaller but cleaner dataset can be more effective than training on a larger noisy dataset.
+
+\subsection{Gold Test Candidate Set}
+
+A 100-sample gold test candidate set was prepared for controlled evaluation. This test set allows direct comparison between the baseline and fine-tuned models.
+
+\subsection{Final Dataset Resources}
+
+\begin{table}[H]
+\centering
+\caption{Final dataset resources.}
+\begin{tabular}{lrl}
+\toprule
+\textbf{File} & \textbf{Rows} & \textbf{Purpose} \\
+\midrule
+\texttt{cleaned\_90k.csv} & 90,978 & Clean corpus \\
+\texttt{train\_high\_quality\_10k.csv} & 10,000 & Fine-tuning data \\
+\texttt{gold\_test\_candidates\_100.csv} & 100 & Evaluation candidates \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\safeimage{Screenshot 2026-06-25 104544.png}{0.95}{Integrated dataset files used in the research pipeline.}
+
+\safeimage{Screenshot 2026-06-25 104558.png}{0.95}{Final dataset summary showing the cleaned 90k corpus, high-quality 10k training subset, and 100-example gold test candidate set.}
+
+\section{Semantic Similarity Filtering}
+
+Rule-based cleaning removes obvious noisy pairs, but it cannot always detect weak semantic alignment. Therefore, an additional semantic similarity filtering stage was added. The goal is to score Pashto-English sentence pairs using multilingual sentence embeddings and retain the most semantically aligned examples for future fine-tuning.
+
+The semantic filtering process follows these steps:
+
+\begin{enumerate}
+    \item Encode Pashto source sentences using a multilingual sentence embedding model.
+    \item Encode English target sentences using the same embedding model.
+    \item Compute cosine similarity between source and target embeddings.
+    \item Sort sentence pairs by semantic similarity score.
+    \item Retain the best aligned sentence pairs for fine-tuning.
+\end{enumerate}
+
+\begin{equation}
+\text{sim}(x,y)=\frac{x \cdot y}{\|x\|\|y\|}
+\end{equation}
+
+A multilingual sentence-transformer model was used for this stage. The filtering stage generated pair-level semantic similarity scores, filtered training subsets, top high-similarity examples, and summary statistics.
+
+\begin{table}[H]
+\centering
+\caption{Semantic filtering outputs.}
+\footnotesize
+\begin{tabular}{p{0.44\linewidth}p{0.43\linewidth}}
+\toprule
+\textbf{Output} & \textbf{Purpose} \\
+\midrule
+Semantic similarity scores & Pair-level similarity scoring \\
+Filtered 8000-pair dataset & Main filtered training subset \\
+Top 2000 clean subset & Cleaner small training subset \\
+Top 4000 clean subset & Cleaner medium training subset \\
+Top examples preview & Manual inspection of best pairs \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Semantic Filtering Interpretation}
+
+The semantic filtering step improves the data-quality pipeline by ranking sentence pairs according to cross-lingual similarity. Higher similarity values indicate better alignment between the Pashto source sentence and the English reference sentence. Lower similarity values may indicate noisy, mismatched, incomplete, or weakly translated sentence pairs.
+
+This step is important in low-resource NMT because a smaller clean dataset can sometimes produce better fine-tuning results than a larger noisy dataset. The filtered 8000-pair dataset and the top 2000/top 4000 clean subsets were therefore prepared for improved LoRA experiments.
+
+\section{Manual Error Analysis}
+
+Automatic scores alone cannot fully explain the quality of translation. Manual error analysis is necessary because low-resource translation errors can be semantically serious even when surface overlap appears acceptable.
+
+\subsection{Error Categories}
+
+The manual error categories considered in this project are:
+
+\begin{itemize}
+    \item Missing words.
+    \item Wrong meaning.
+    \item Incomplete translation.
+    \item Named entity error.
+    \item Tense mismatch.
+    \item Gender mismatch.
+    \item Literal translation.
+    \item Hallucinated words.
+    \item Poor fluency.
+\end{itemize}
+
+\subsection{Manual Evaluation Template}
+
+A manual evaluation template was created to compare baseline and fine-tuned outputs. It includes columns for meaning preservation, fluency, completeness, named entity correctness, main error type, and manual comments. This is important because BLEU and chrF cannot fully capture semantic adequacy.
+
+\begin{table}[H]
+\centering
+\caption{Manual evaluation fields.}
+\footnotesize
+\begin{tabular}{p{0.36\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Field} & \textbf{Purpose} \\
+\midrule
+Meaning score & Checks whether source meaning is preserved \\
+Fluency score & Checks naturalness of generated English \\
+Completeness score & Checks whether information is missing \\
+Named entity correctness & Checks names, places, and organizations \\
+Main error type & Records dominant translation error \\
+Manual comment & Human qualitative note \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{LoRA Fine-Tuning}
+
+\subsection{Motivation}
+
+Full fine-tuning of NLLB is computationally expensive. LoRA is selected because it trains a small number of adapter parameters while freezing most of the base model. This reduces memory requirements and makes fine-tuning more practical.
+
+\subsection{Original LoRA Configuration}
+
+\begin{table}[H]
+\centering
+\caption{Original LoRA fine-tuning configuration.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Component} & \textbf{Configuration} \\
+\midrule
+Base model & NLLB 600M \\
+Source language & \texttt{pbt\_Arab} \\
+Target language & \texttt{eng\_Latn} \\
+Fine-tuning method & LoRA \\
+LoRA rank & 8 \\
+LoRA alpha & 16 \\
+LoRA dropout & 0.05 \\
+Target modules & \texttt{q\_proj}, \texttt{v\_proj} \\
+Training data & High-quality 10k subset \\
+Evaluation data & 100 gold candidates \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Semantic-Filtered LoRA Configuration}
+
+A semantic-filtered LoRA experiment was added after semantic similarity filtering. The semantic-filtered LoRA model was trained using the filtered Pashto-English subset and evaluated on the same gold test candidate set.
+
+\begin{table}[H]
+\centering
+\caption{Semantic-filtered LoRA experiment.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Component} & \textbf{Configuration} \\
+\midrule
+Base model & NLLB 600M \\
+Fine-tuning method & LoRA \\
+Training data & Semantic-filtered 8000-pair subset \\
+Evaluation data & 100 gold test candidates \\
+Output file & Semantic LoRA prediction CSV \\
+Score file & Semantic LoRA BLEU/chrF score CSV \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The long repository filenames were kept in the GitHub project for reproducibility, but shortened names are used in this paper to avoid layout overflow in IEEE two-column format.
+
+\section{Fine-Tuning Results}
+
+Initial LoRA fine-tuning trials produced chrF values around 38--39. Compared with the baseline chrF of 36.49, this indicates modest but stable improvement. The semantic-filtered LoRA experiment was added to test whether cleaner sentence-pair selection improves translation quality compared with the original high-quality subset.
+
+\begin{table}[H]
+\centering
+\caption{Baseline and LoRA experiment summary.}
+\footnotesize
+\begin{tabular}{p{0.44\linewidth}cc}
+\toprule
+\textbf{Model Setting} & \textbf{BLEU} & \textbf{chrF} \\
+\midrule
+NLLB baseline & 17.97 & 36.49 \\
+Original LoRA trials & -- & 38--39 \\
+Semantic-filtered LoRA & Repo. & Repo. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Checkpoint Comparison Interpretation}
+
+The checkpoint comparison was designed to compare the pretrained baseline, original LoRA checkpoints, and semantic-filtered LoRA checkpoint. The purpose is to check whether semantic filtering improves translation quality by providing cleaner training examples.
+
+If semantic-filtered LoRA improves over the original LoRA, it supports the claim that data quality has a direct effect on low-resource translation. If the improvement remains small, it suggests that the current model may be limited by CPU-only training, noisy references, small evaluation size, or the need for larger GPU-based experiments.
+
+\section{Improved LoRA Experiments}
+
+To improve translation quality beyond the initial LoRA results, additional experiments were designed using cleaner semantic-filtered data and stronger adapter settings.
+
+\subsection{Improved Data Selection}
+
+Two cleaner subsets were created from semantic similarity scores:
+
+\begin{itemize}
+    \item \texttt{train\_semantic\_top2000\_clean.csv}
+    \item \texttt{train\_semantic\_top4000\_clean.csv}
+\end{itemize}
+
+These subsets additionally apply sentence length and length-ratio filtering. The motivation is that smaller but cleaner data may outperform larger noisy data in low-resource settings.
+
+\subsection{Strong LoRA and Strong-v2 LoRA}
+
+A heavier LoRA setting was tested using more trainable modules. However, local CPU/RAM constraints made the heaviest setup difficult to run. Therefore, a safer strong-v2 configuration was prepared using attention projection modules only.
+
+\begin{table}[H]
+\centering
+\caption{Strong-v2 LoRA improvement setup.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Component} & \textbf{Configuration} \\
+\midrule
+LoRA rank & 12 \\
+LoRA alpha & 24 \\
+Target modules & \texttt{q\_proj}, \texttt{k\_proj}, \texttt{v\_proj}, \texttt{out\_proj} \\
+Dropout & 0.08 \\
+Training data & Semantic top-clean subset \\
+Goal & Improve chrF while avoiding CPU/RAM failure \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Improved Experiment Interpretation}
+
+The improved LoRA experiment tests whether stronger adapters and cleaner semantic-filtered data can improve translation quality beyond the original LoRA setup. A larger adapter can potentially learn better task-specific changes, but it also increases memory and compute requirements.
+
+The strong-v2 configuration is therefore a practical compromise. It is stronger than the initial LoRA setup because it uses more attention projection modules, but it avoids the heavier feed-forward modules that caused local CPU/RAM failure. This makes it suitable for continued experimentation under limited hardware constraints.
+
+\section{Direct Hindi and Pivot Hindi Translation}
+
+The project explores Hindi translation through two approaches. The first approach is direct Pashto-to-Hindi translation using NLLB. The second approach is pivot translation, where Pashto is first translated into English and then English is translated into Hindi.
+
+The pivot approach is promising because Pashto-to-English can be evaluated more reliably using English references. If the Pashto-to-English model improves, the downstream English-to-Hindi output can also improve.
+
+\subsection{Direct-vs-Pivot Hindi Comparison}
+
+A direct-vs-pivot Hindi comparison file was generated using the gold test candidates. Each sample contains the Pashto source, pivot English translation, direct Hindi output, pivot Hindi output, and manual review columns.
+
+\begin{table}[H]
+\centering
+\caption{Hindi comparison outputs.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Column} & \textbf{Purpose} \\
+\midrule
+Pashto source & Original input sentence \\
+Pivot English & Intermediate English translation \\
+Direct Hindi & Direct Pashto-to-Hindi output \\
+Pivot Hindi & Pashto-to-English-to-Hindi output \\
+Manual better method & Human comparison field \\
+Manual comment & Error and quality notes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This comparison is necessary because Hindi output cannot be judged reliably using BLEU or chrF without gold Hindi references. Manual review is therefore required to decide whether direct or pivot translation is better.
+
+\section{IndicTrans2 Exploration}
+
+NLLB can generate Hindi directly and through pivoting, but IndicTrans2 is specifically designed for Indian language translation. Therefore, an IndicTrans2 exploration note was added for the English-to-Hindi stage.
+
+The planned improved pipeline is:
+
+\begin{center}
+Pashto $\rightarrow$ English using fine-tuned NLLB $\rightarrow$ Hindi using IndicTrans2.
+\end{center}
+
+The goal is to compare three Hindi strategies:
+
+\begin{enumerate}
+    \item Direct Pashto-to-Hindi using NLLB.
+    \item Pivot Pashto-to-English-to-Hindi using NLLB.
+    \item Pivot Pashto-to-English using fine-tuned NLLB and English-to-Hindi using IndicTrans2.
+\end{enumerate}
+
+\section{Ablation Study}
+
+A complete ablation study is needed to understand how data size, semantic filtering, and LoRA settings affect translation performance.
+
+\begin{table}[H]
+\centering
+\caption{Ablation study design.}
+\footnotesize
+\begin{tabular}{p{0.11\linewidth}p{0.25\linewidth}p{0.22\linewidth}p{0.27\linewidth}}
+\toprule
+\textbf{ID} & \textbf{Model} & \textbf{Data} & \textbf{Purpose} \\
+\midrule
+E0 & NLLB & None & Baseline \\
+E1 & NLLB+LoRA & 100 pairs & Pipeline test \\
+E2 & NLLB+LoRA & 500 pairs & Small training \\
+E3 & NLLB+LoRA & 1k pairs & Scaling test \\
+E4 & NLLB+LoRA & 3k pairs & Medium training \\
+E5 & NLLB+LoRA & 10k pairs & Main run \\
+E6 & NLLB+LoRA & Semantic 8k & Filtering test \\
+E7 & Strong-v2 LoRA & Top semantic 2k & Adapter test \\
+E8 & Strong-v2 LoRA & Top semantic 4k & Larger clean-data test \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproducibility}
+
+The repository contains code for dataset processing, semantic filtering, fine-tuning, evaluation, checkpoint comparison, Hindi comparison, and report generation. The important files include:
+
+\begin{itemize}
+    \item \texttt{src/finetune\_nllb\_lora.py}
+    \item \texttt{src/finetune\_nllb\_lora\_strong\_v2.py}
+    \item \texttt{src/week5\_semantic\_filter.py}
+    \item \texttt{src/evaluate\_week4\_model.py}
+    \item \texttt{src/evaluate\_improved\_generation.py}
+    \item \texttt{src/compare\_remaining\_checkpoints.py}
+    \item \texttt{src/remaining\_direct\_vs\_pivot\_hindi.py}
+    \item \texttt{data/train\_high\_quality\_10k.csv}
+    \item \texttt{data/train\_semantic\_filtered\_8000.csv}
+    \item \texttt{data/gold\_test\_candidates\_100.csv}
+\end{itemize}
+
+Large model checkpoints are not stored in the repository because they are too large for normal GitHub tracking. Instead, scripts, evaluation outputs, graphs, and reports are pushed to maintain reproducibility.
+
+\section{Limitations}
+
+The current study has several limitations:
+
+\begin{itemize}
+    \item The fine-tuning experiments were limited by CPU-only training.
+    \item The evaluation set contains only 100 gold candidate examples.
+    \item Hindi evaluation lacks gold Hindi references.
+    \item Some dataset noise may remain even after cleaning and semantic filtering.
+    \item BLEU and chrF do not fully measure semantic correctness.
+    \item Manual scoring is still required for final human-quality judgment.
+    \item Industry-level translation quality likely requires larger GPU-based fine-tuning and stronger human-cleaned data.
+\end{itemize}
+
+\section{Remaining Work and Extended Results}
+
+This section summarizes the additional experiments and remaining evaluation work added after the initial LoRA fine-tuning stage. The goal of these experiments is to move the project beyond automatic BLEU/chrF reporting toward a stronger research-quality evaluation pipeline.
+
+\subsection{Completed Extended Work}
+
+Several additional components were completed after the initial baseline and LoRA experiments. These components improve the project in three directions: data quality, model comparison, and Hindi translation analysis.
+
+\begin{table}[H]
+\centering
+\caption{Completed extended research components.}
+\footnotesize
+\begin{tabular}{p{0.30\linewidth}p{0.56\linewidth}}
+\toprule
+\textbf{Component} & \textbf{Completed Output} \\
+\midrule
+Semantic filtering & Sentence embeddings were used to score Pashto-English alignment. \\
+Filtered data & Filtered 8000-pair data and top 2000/top 4000 subsets were created. \\
+Semantic LoRA & LoRA was trained using semantically filtered data. \\
+Checkpoint comparison & Baseline, original LoRA, and semantic LoRA were compared. \\
+Hindi comparison & Direct and pivot Hindi outputs were generated for review. \\
+IndicTrans2 plan & English-to-Hindi improvement plan was documented. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Semantic Filtering Result}
+
+The semantic filtering stage was added to improve the training-data quality beyond rule-based cleaning. While rule-based cleaning removes duplicates, URLs, HTML noise, and abnormal sentence lengths, semantic filtering attempts to identify whether the Pashto source and English target are actually meaning-aligned.
+
+The filtering process generated pair-level semantic similarity scores, a semantically filtered 8000-pair training set, cleaner top 2000/top 4000 subsets, and top high-similarity examples for inspection.
+
+This step is important because low-resource NMT often benefits more from smaller clean data than from larger noisy data. The semantic-filtered subsets provide a stronger basis for future fine-tuning experiments.
+
+\subsection{Semantic-Filtered LoRA Result}
+
+After semantic filtering, LoRA fine-tuning was repeated using the filtered training data. This experiment was designed to test whether cleaner sentence-pair selection improves translation quality compared with the earlier high-quality 10k subset.
+
+\begin{table}[H]
+\centering
+\caption{Checkpoint comparison setup.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Checkpoint} & \textbf{Purpose} \\
+\midrule
+Baseline NLLB & Measures zero-shot pretrained performance. \\
+Original LoRA & Measures adaptation using high-quality data. \\
+Semantic LoRA & Measures adaptation using filtered data. \\
+Strong-v2 LoRA & Tests stronger but CPU-safe LoRA. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The semantic-filtered LoRA experiment provides an important research comparison. If the score improves, it supports the claim that semantic filtering improves low-resource fine-tuning. If the score remains close to earlier LoRA results, it indicates that performance may be saturating due to dataset quality, reference mismatch, model size, or compute limitations.
+
+\subsection{Improved LoRA Experiment}
+
+An additional stronger LoRA experiment was designed to improve translation quality. A heavier LoRA configuration was first attempted, but it was difficult to run under local CPU/RAM limitations. Therefore, a safer strong-v2 configuration was prepared.
+
+\begin{table}[H]
+\centering
+\caption{Strong-v2 LoRA configuration.}
+\footnotesize
+\begin{tabular}{p{0.34\linewidth}p{0.52\linewidth}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Base model & NLLB 600M \\
+LoRA rank & 12 \\
+LoRA alpha & 24 \\
+LoRA dropout & 0.08 \\
+Target modules & Attention projections only \\
+Training data & Semantic top-clean subset \\
+Goal & Improve chrF while avoiding CPU/RAM failure \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This experiment is useful because it tests whether increasing adapter capacity can improve translation quality while still remaining feasible on limited hardware.
+
+\subsection{Direct Hindi versus Pivot Hindi Result}
+
+The Hindi translation extension compares direct Pashto-to-Hindi translation using NLLB and pivot Pashto-to-English-to-Hindi translation using NLLB. A direct-vs-pivot Hindi comparison file was generated. Each row contains the Pashto source sentence, pivot English output, direct Hindi output, pivot Hindi output, and manual review columns.
+
+This comparison is necessary because Hindi output cannot be judged reliably using BLEU or chrF without gold Hindi references. Manual review is therefore required to decide whether direct or pivot translation is better.
+
+\subsection{IndicTrans2 Exploration}
+
+IndicTrans2 was identified as the next improvement for the Hindi stage. The planned improved pipeline is:
+
+\begin{center}
+Pashto $\rightarrow$ English using fine-tuned NLLB $\rightarrow$ Hindi using IndicTrans2.
+\end{center}
+
+This is expected to improve Hindi fluency because IndicTrans2 is designed specifically for Indian language translation. The current project has prepared the exploration note, but full IndicTrans2 inference and manual comparison remain future work.
+
+\subsection{Remaining Evaluation Work}
+
+The main remaining task is manual human scoring. Automatic metrics are useful, but manual evaluation is required to judge meaning preservation, fluency, completeness, named entity correctness, hallucination, and missing information.
+
+\begin{table}[H]
+\centering
+\caption{Remaining evaluation tasks.}
+\footnotesize
+\begin{tabular}{p{0.50\linewidth}p{0.34\linewidth}}
+\toprule
+\textbf{Task} & \textbf{Status} \\
+\midrule
+Manual scoring of baseline vs fine-tuned outputs & Pending \\
+Manual scoring of direct vs pivot Hindi outputs & Pending \\
+IndicTrans2 inference & Planned \\
+GPU-based larger LoRA training & Planned \\
+Human-cleaned reference improvement & Planned \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Current Interpretation}
+
+The project has progressed from a baseline translation system to a full research pipeline with dataset cleaning, semantic filtering, LoRA fine-tuning, semantic-filtered LoRA evaluation, checkpoint comparison, direct-vs-pivot Hindi comparison, and IndicTrans2 planning.
+
+The automatic scores show modest improvement over the baseline, but not industry-level translation quality yet. This is expected for low-resource Pashto translation under CPU-only training and limited manually verified references. The strongest next step is not only more training, but better human-cleaned data, manual scoring, and GPU-based experiments with larger or better-tuned checkpoints.
+
+\section{Discussion}
+
+The results show that the pretrained NLLB model already provides a meaningful Pashto-to-English baseline. However, the baseline chrF score of 36.49 indicates that the model still struggles with fine-grained lexical and morphological alignment.
+
+The LoRA trials improve chrF to approximately 38--39. This improvement is consistent but not large. The semantic-filtered LoRA experiment tests whether better sentence-pair quality can improve results further. Even if the improvement remains small, the result is still useful because it shows the effect of data filtering and adaptation under low-resource and CPU-constrained conditions.
+
+The direct-vs-pivot Hindi outputs show that pivot translation is a practical strategy because Pashto-to-English quality can be evaluated and improved first. However, Hindi fluency still requires stronger Hindi-specific translation, motivating the IndicTrans2 extension.
+
+\section{Conclusion}
+
+This paper presented a quality-aware research pipeline for low-resource Pashto Neural Machine Translation. Starting from 93,498 raw Pashto-English sentence pairs, the project produced a cleaned dataset of 90,978 pairs, a high-quality 10,000-pair fine-tuning subset, semantic-filtered training subsets, and a 100-sample gold test candidate set. The baseline NLLB model achieved BLEU 17.97 and chrF 36.49. Initial LoRA experiments improved chrF to approximately 38--39, showing modest but stable gains.
+
+The project was extended with semantic similarity filtering, semantic-filtered LoRA training, checkpoint comparison, direct-vs-pivot Hindi comparison, IndicTrans2 exploration, and improved LoRA experiment design. The results demonstrate that dataset cleaning, semantic filtering, and parameter-efficient fine-tuning can improve low-resource Pashto translation. However, stronger improvements will require GPU-based training, better human-cleaned references, larger controlled experiments, and manual evaluation.
+
+\section*{Repository}
+
+The complete project repository is available at:
+
+\begin{center}
+\url{https://github.com/Hrithikcrick/pashto-nmt-carnot-internship}
+\end{center}
+
+\begin{thebibliography}{00}
+
+\bibitem{nllb}
+NLLB Team, M. R. Costa-jussà, J. Cross, O. Çelebi, M. Elbayad, K. Heafield, K. Heffernan, E. Kalbassi, J. Lam, D. Licht, J. Maillard, A. Sun, S. Wang, G. Wenzek, A. Youngblood, B. Akula, L. Barrault, G. M. Gonzalez, P. Hansanti, and others, ``No Language Left Behind: Scaling Human-Centered Machine Translation,'' \textit{arXiv preprint arXiv:2207.04672}, 2022.
+
+\bibitem{lora}
+E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen, ``LoRA: Low-Rank Adaptation of Large Language Models,'' \textit{arXiv preprint arXiv:2106.09685}, 2021.
+
+\bibitem{bleu}
+K. Papineni, S. Roukos, T. Ward, and W. J. Zhu, ``BLEU: a Method for Automatic Evaluation of Machine Translation,'' in \textit{Proceedings of the 40th Annual Meeting of the Association for Computational Linguistics}, Philadelphia, PA, USA, 2002, pp. 311--318.
+
+\bibitem{chrf}
+M. Popovi\'c, ``chrF: character n-gram F-score for automatic MT evaluation,'' in \textit{Proceedings of the Tenth Workshop on Statistical Machine Translation}, Lisbon, Portugal, 2015, pp. 392--395.
+
+\bibitem{peft}
+Hugging Face, ``PEFT: Parameter-Efficient Fine-Tuning of Billion-Scale Models,'' 2024. [Online]. Available: \url{https://github.com/huggingface/peft}
+
+\bibitem{transformers}
+Hugging Face, ``Transformers: State-of-the-Art Machine Learning for PyTorch, TensorFlow, and JAX,'' 2024. [Online]. Available: \url{https://github.com/huggingface/transformers}
+
+\bibitem{sacrebleu}
+M. Post, ``A Call for Clarity in Reporting BLEU Scores,'' in \textit{Proceedings of the Third Conference on Machine Translation}, 2018, pp. 186--191.
+
+\bibitem{indictrans}
+A. Gala, P. Ramesh, P. Doddapaneni, A. Kumar, J. B. P. Kunchukuttan, and R. Khapra, ``IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages,'' \textit{arXiv preprint arXiv:2305.16307}, 2023.
+
+\end{thebibliography}
+
+\end{document}

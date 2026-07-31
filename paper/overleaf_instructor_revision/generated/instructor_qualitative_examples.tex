@@ -1,0 +1,50 @@
+\begin{table*}[t]
+\centering
+\caption{Qualitative comparison of baseline NLLB, original LoRA, and semantic-filtered LoRA outputs.}
+\label{tab:qualitative-comparison}
+\footnotesize
+\begin{tabularx}{\textwidth}{p{0.16\textwidth}X}
+\toprule
+\multicolumn{2}{l}{\textbf{Example 1: Improvement candidate}} \\
+Pashto source & په مادي توګه د فرعي لیستونو جوړولو لپاره برخه. \\
+Reference & Segment manually to create sub-lists. \\
+NLLB baseline & Physically part to form sub-lists. \\
+Original LoRA & Physically part to create sub-lists. \\
+Semantic LoRA & Physically part to create sub-lists. \\
+chrF++ change & +24.31 (Semantic LoRA minus baseline) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Example 2: Improvement candidate}} \\
+Pashto source & د بحث سره یوځای غواړئ؟ \\
+Reference & Want to join the discussion? \\
+NLLB baseline & Would you like to join the discussion? \\
+Original LoRA & Would you like to join the discussion? \\
+Semantic LoRA & Want to join the discussion? \\
+chrF++ change & +23.76 (Semantic LoRA minus baseline) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Example 3: Improvement candidate}} \\
+Pashto source & لاس اګاس ، سان جوآن دی لا رمبلا ، ټینریف \\
+Reference & Las Aguas, San Juan de la Rambla , Tenerife \\
+NLLB baseline & Las Agas, San Juan de la Rambala, and Tenerife \\
+Original LoRA & Las Agas, San Juan de la Rambla, Tenerife \\
+Semantic LoRA & Las Agas, San Juan de la Rambla, Tenerife \\
+chrF++ change & +17.90 (Semantic LoRA minus baseline) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Example 4: Regression candidate}} \\
+Pashto source & 1. د ورکړې شرایط؟ \\
+Reference & 1. Payment Terms ? \\
+NLLB baseline & 1. Payment terms? \\
+Original LoRA & 1. Conditions of payment? \\
+Semantic LoRA & 1. Conditions of payment? \\
+chrF++ change & -36.26 (Semantic LoRA minus baseline) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Example 5: Regression candidate}} \\
+Pashto source & د ډراپ شاپنگ طاق غوره کړئ چې ګټور وي \\
+Reference & Choose a dropshipping niche that's profitable \\
+NLLB baseline & Choose a drop-shopping niche that is profitable \\
+Original LoRA & Choose a drop-shopping niche that is useful \\
+Semantic LoRA & Choose a drop-shopping niche that is useful \\
+chrF++ change & -16.30 (Semantic LoRA minus baseline) \\
+\midrule
+\bottomrule
+\end{tabularx}
+\end{table*}

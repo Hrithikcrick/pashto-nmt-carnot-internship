@@ -20,3 +20,26 @@ data/*
 *.gz
 models/research/
 logs/*.log
+# Python environments and cache
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+# Secrets and local environment
+.env.*
+!.env.example
+*.token
+# Large model files and checkpoints
+*.ckpt
+# Training logs and temporary files
+logs/
+*.log
+wandb/
+.cache/
+*.tmp
+*.temp
+# Editor and operating-system files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

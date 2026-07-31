@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\caption{Standardized Pashto--English evaluation across NLLB, LoRA, and external multilingual baselines.}
+\label{tab:extended-model-comparison}
+\small
+\begin{tabular}{lrrrrrl}
+\toprule
+\textbf{Model} & \textbf{BLEU} & \textbf{chrF++} & \textbf{TER} & \textbf{COMET} & \textbf{Samples} & \textbf{Setting} \\
+\midrule
+Baseline NLLB & 19.63 & 35.48 & 75.68 & 0.6818 & 100 & NLLB baseline or LoRA adaptation \\
+Original LoRA & 19.77 & 36.31 & 76.83 & 0.6775 & 100 & NLLB baseline or LoRA adaptation \\
+Semantic LoRA & 20.38 & 36.61 & 76.45 & 0.6819 & 100 & NLLB baseline or LoRA adaptation \\
+M2M100 418M & 14.62 & 30.59 & 85.42 & 0.6169 & 100 & External zero-shot baseline \\
+mBART-50 & 22.65 & 38.08 & 75.77 & 0.6932 & 100 & External zero-shot baseline \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}\parbox{0.95\textwidth}{\footnotesize TER is lower-is-better. M2M100 and mBART-50 are external zero-shot baselines and were not fine-tuned on the project corpus.}
+\end{table*}
